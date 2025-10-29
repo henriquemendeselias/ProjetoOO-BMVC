@@ -8,25 +8,22 @@ ctl = Application()
 
 
 #-----------------------------------------------------------------------------
-# Rotas:
 
 @app.route('/static/<filepath:path>')
 def serve_static(filepath):
     return static_file(filepath, root='./app/static')
 
+#-----------------------------------------------------------------------------
+
 
 @app.route('/')
+@app.route('/index')
+def action_index():
+    return ctl.render('index')
+
 @app.route('/helper')
 def action_helper(info= None):
     return ctl.render('helper')
-
-
-#-----------------------------------------------------------------------------
-# Suas rotas aqui:
-
-@app.route('/pagina', methods=['GET'])
-def action_pagina():
-    return ctl.render('pagina')
 
 #-----------------------------------------------------------------------------
 

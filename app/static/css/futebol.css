@@ -1,0 +1,122 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #0c4319; 
+    color: #ffffff;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 4px solid #fdb913;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5em;
+}
+
+main {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+h2 {
+    color: #004d98;
+    border-bottom: 2px solid #f4f4f4;
+    padding-bottom: 10px;
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table thead {
+    background-color: #e9ecef;
+}
+
+table th, table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+table th {
+    font-weight: bold;
+    color: #555;
+}
+
+
+.btn-novo, .btn-editar, .btn-deletar, .btn-salvar {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    font-size: 1em;
+}
+
+.btn-novo {
+    background-color: #28a745; 
+    margin-bottom: 20px;
+}
+
+.btn-editar {
+    background-color: #150fb5; 
+    margin-right: 5px;
+}
+
+.btn-deletar {
+    background-color: #dc3545; 
+}
+
+.btn-salvar {
+    background-color: #007bff; 
+    margin-top: 10px;
+}
+
+.acoes a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+
+.form-grupo {
+    margin-bottom: 15px;
+}
+
+.form-grupo label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-grupo input[type="text"],
+.form-grupo input[type="number"],
+.form-grupo select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; 
+}
+
+.form-grupo select {
+    
+    height: 40px; 
+}
