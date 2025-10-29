@@ -27,25 +27,25 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Exemplo: Neymar</td>
-                    <td>Atacante</td>
-                    <td>10</td>
-                    <td class="acoes">
-                        <a href="/editar/1" class="btn-editar">Editar</a>
-                        <a href="/deletar/1" class="btn-deletar">Deletar</a>
-                    </td>
-                </tr>
-                 <tr>
-                    <td>Exemplo: Vini Jr.</td>
-                    <td>Atacante</td>
-                    <td>7</td>
-                    <td class="acoes">
-                        <a href="/editar/2" class="btn-editar">Editar</a>
-                        <a href="/deletar/2" class="btn-deletar">Deletar</a>
-                    </td>
-                </tr>
-            </tbody>
+                %if not jogadores:
+                    <tr>
+                        <td colspan="4" style="text-align: center;">Nenhum jogador cadastrado ainda.</td>
+                    </tr>
+                %else:
+                    %for j in jogadores:
+                        <tr>
+                            <td>{{j.get_nome()}}</td>
+                            <td>{{j.get_posicao()}}</td>
+                            <td>{{j.get_numero_camisa()}}</td>
+                            <td class="acoes">
+                                <a href="/editar/{{j.get_id()}}" class="btn-editar">Editar</a>
+                                
+                                <a href="/deletar/{{j.get_id()}}" class="btn-deletar">Deletar</a>
+                            </td>
+                        </tr>
+                    %end
+                %end
+                </tbody>>
         </table>
     </main>
 
