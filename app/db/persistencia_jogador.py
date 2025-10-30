@@ -4,7 +4,7 @@ from app.models.jogador import Jogador
 
 class PersistenciaJogador:
 
-    FILE_PATH = os.path.join('app', 'controllers', 'db', 'elenco.json')
+    FILE_PATH = os.path.join('app', 'db', 'elenco.json')
 
     def __init__(self):
         self._garantir_arquivo_existe()
@@ -49,9 +49,9 @@ class PersistenciaJogador:
         Read do CRUD - ler um por um
         """
         dados = self._ler_arquivo()
-        for j_dict in dados:
-            if j_dict.get('id') == jogador_id:
-                return Jogador.from_dict(j_dict)
+        for jdict in dados:
+            if jdict.get('id') == jogador_id:
+                return Jogador.from_dict(jdict)
         return None
 
     def atualizar(self, jogador_atualizado):
@@ -61,12 +61,12 @@ class PersistenciaJogador:
         dados = self._ler_arquivo()
         dados_atualizados = []
         encontrou = False
-        for j_dict in dados:
-            if j_dict.get('id') == jogador_atualizado.get_id():
+        for jdict in dados:
+            if jdict.get('id') == jogador_atualizado.get_id():
                 dados_atualizados.append(jogador_atualizado.to_dict())
                 encontrou = True
             else:
-                dados_atualizados.append(j_dict)
+                dados_atualizados.append(jdict)
         
         if encontrou:
             self._escrever_arquivo(dados_atualizados)
