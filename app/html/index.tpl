@@ -16,6 +16,10 @@
         <div class="container-btn-novo">
             <a href="{{ url_for('action_formulario_novo') }}" class="btn-novo">Adicionar Novo Jogador</a>
         </div>
+    
+        <div style="text-align: center; margin-bottom: 20px;">
+            <a href="{{ url_for('action_posicoes_index') }}" class="btn-editar" style="text-decoration: none;">Gerenciar Posições</a>
+        </div>
 
         <table>
             <thead>
@@ -35,7 +39,7 @@
                     {% for j in jogadores %}
                         <tr>
                             <td>{{j.get_nome()}}</td>
-                            <td>{{j.get_posicao()}}</td>
+                            <td>{{ posicoes_map.get(j.get_posicao_id(), 'N/A') }}</td>
                             <td>{{j.get_numero_camisa()}}</td>
                             <td class="acoes">
                                 <a href="{{ url_for('action_formulario_editar', jogador_id=j.get_id()) }}" class="btn-editar">Editar</a>

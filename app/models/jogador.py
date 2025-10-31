@@ -2,10 +2,10 @@ import uuid
 
 class Jogador:
     
-    def __init__(self, nome, posicao, numero_camisa, id=None):
+    def __init__(self, nome, posicao_id, numero_camisa, id=None):
         self.id = id if id else str(uuid.uuid4())
         self.nome = nome
-        self.posicao = posicao
+        self.posicao_id = posicao_id
         self.numero_camisa = numero_camisa
 
     def get_id(self):
@@ -14,8 +14,8 @@ class Jogador:
     def get_nome(self):
         return self.nome
         
-    def get_posicao(self):
-        return self.posicao
+    def get_posicao_id(self):
+        return self.posicao_id
         
     def get_numero_camisa(self):
         return self.numero_camisa
@@ -33,7 +33,7 @@ class Jogador:
         return {
             "id": self.id,
             "nome": self.nome,
-            "posicao": self.posicao,
+            "posicao_id": self.posicao_id,
             "numero_camisa": self.numero_camisa
         }
 
@@ -42,6 +42,6 @@ class Jogador:
         return Jogador(
             id=data.get("id"),
             nome=data.get("nome"),
-            posicao=data.get("posicao"),
+            posicao_id=data.get("posicao_id"),
             numero_camisa=data.get("numero_camisa")
         )

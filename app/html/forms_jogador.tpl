@@ -11,7 +11,7 @@
 <body>
 
     <header>
-        <h1>Gerenciador de Elenco de Futebol</h1>
+        <h1>Gerenciador de Elenco de Futebol (Versão Flask)</h1>
     </header>
 
     <main>
@@ -28,15 +28,22 @@
 
             <div class="form-grupo">
                 <label for="posicao">Posição:</label>
-                <select id="posicao" name="posicao" required>
+                <select id="posicao" name="posicao_id" required>
                     <option value="">Selecione a posição...</option>
-                    <option value="Goleiro" {% if (jogador.posicao or '') == 'Goleiro' %}selected{% endif %}>Goleiro (GK)</option>
-                    <option value="Defensor" {% if (jogador.posicao or '') == 'Defensor' %}selected{% endif %}>Defensor (ZAG, LD, LE)</option>
-                    <option value="Meio-Campo" {% if (jogador.posicao or '') == 'Meio-Campo' %}selected{% endif %}>Meio-Campo (VOL, MC, MEI)</option>
-                    <option value="Atacante" {% if (jogador.posicao or '') == 'Atacante' %}selected{% endif %}>Atacante (SA, PD, PE, ATA)</option>
+                    
+                    {% for pos in lista_posicoes %}
+                        <option value="{{ pos.get_id() }}" 
+                                
+                                {% if (jogador.posicao_id or '') == pos.get_id() %}
+                                    selected
+                                {% endif %}
+                                >
+                            {{ pos.get_nome() }} ({{ pos.get_sigla() }})
+                        </option>
+                    {% endfor %}
+                    
                 </select>
             </div>
-
             <div class="form-grupo">
                 <label for="numero_camisa">Número da Camisa:</label>
                 <input type="number" id="numero_camisa" name="numero_camisa" value="{{ jogador.numero_camisa or '' }}" min="1" max="99" required placeholder="Ex: 7">
@@ -50,7 +57,7 @@
     </main>
 
     <footer>
-        <p>Criado por Henrique Mendes</p>
+        <p>Copyright &copy; 2025 - Criado por Henrique Mendes</p>
     </footer>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
