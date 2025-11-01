@@ -46,8 +46,9 @@
         </table>
         
         <div style="text-align: center; margin-top: 20px;">
-            <a href="{{ url_for('action_index') }}" class="btn-editar" style="text-decoration: none;">Voltar ao Elenco Principal</a>
+            <a href="{{ url_for('action_times_index') }}" class="btn-editar" style="text-decoration: none;">Voltar à Lista de Elencos</a>
         </div>
+    </main>
     </main>
 
     <footer>
