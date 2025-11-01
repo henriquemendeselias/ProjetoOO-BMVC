@@ -47,7 +47,7 @@
     </main>
 
     <footer>
-        <p>Copyright &copy; 2025 - Criado por Henrique Mendes</p>
+        <p>Criado por Henrique Mendes</p>
     </footer>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>

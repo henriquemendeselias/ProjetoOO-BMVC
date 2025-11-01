@@ -139,3 +139,31 @@ footer {
 footer p {
     margin: 0;
 }
+
+.controls-container {
+    display: flex;
+    align-items: flex-end;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.controls-container .form-grupo {
+    flex-grow: 1;
+    margin-bottom: 0;
+    min-width: 250px;
+}
+
+.controls-container .container-btn-novo,
+.controls-container .container-btn-gerenciar {
+    margin-bottom: 0;
+}
+
+table td a {
+    text-decoration: none;
+}
+
+table td a:hover,
+table td a:focus {
+    text-decoration: underline;
+}

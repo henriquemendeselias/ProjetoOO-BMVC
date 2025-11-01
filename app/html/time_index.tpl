@@ -13,20 +13,28 @@
     <main>
         <h2>Gerenciar Elencos / Times</h2>
         
-        <div class="container-btn-novo">
-            <a href="{{ url_for('action_time_novo') }}" class="btn-novo">Adicionar Novo Elenco</a>
+        <div class="controls-container">
+        
+            <div class="form-grupo">
+                <label for="filtro-elencos">Filtrar Elencos por Nome:</label>
+                <input type="text" id="filtro-elencos" placeholder="Digite um nome de elenco..." 
+                       style="border: 2px solid #004d98;">
+            </div>
+            
+            <div class="container-btn-novo">
+                <a href="{{ url_for('action_time_novo') }}" class="btn-novo">Adicionar Novo Elenco</a>
+            </div>
+            
+            <div class="container-btn-gerenciar">
+                 <a href="{{ url_for('action_posicoes_index') }}" class="btn-editar" style="text-decoration: none;">Gerenciar Posições</a>
+            </div>
+            
         </div>
-
-        <div class="form-grupo" style="width: 50%; margin: 20px auto;">
-            <label for="filtro-elencos">Filtrar Elencos por Nome:</label>
-            <input type="text" id="filtro-elencos" placeholder="Digite um nome de elenco para filtrar..." 
-                   style="border: 2px solid #004d98;">
-        </div>
-
         <table>
             <thead>
                 <tr>
-                    <th>Nome do Elenco</th> <th>Tipo</th>
+                    <th>Nome do Elenco</th>
+                    <th>Tipo</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -39,14 +47,13 @@
                     {% for t in times %}
                         <tr>
                             <td>
-                                <a href="{{ url_for('action_elenco_detalhes', time_id=t.get_id()) }}" style="text-decoration: none; color: #004d98; font-weight: bold;">
+                                <a href="{{ url_for('action_elenco_detalhes', time_id=t.get_id()) }}" style="color: #004d98; font-weight: bold;">
                                     {{ t.get_nome() }}
                                 </a>
                             </td>
-                            
                             <td>{{ t.get_tipo() }}</td>
                             <td class="acoes">
-                                <a href="{{ url_for('action_time_editar', time_id=t.get_id()) }}" class="btn-editar">Renomear Elenco</a>
+                                <a href="{{ url_for('action_time_editar', time_id=t.get_id()) }}" class="btn-editar">Config. Elenco</a>
                                 <a href="{{ url_for('action_time_deletar', time_id=t.get_id()) }}" class="btn-deletar">Deletar</a>
                             </td>
                         </tr>
@@ -55,13 +62,10 @@
             </tbody>
         </table>
         
-        <div style="text-align: center; margin-top: 20px;">
-             <a href="{{ url_for('action_posicoes_index') }}" class="btn-editar" style="text-decoration: none;">Gerenciar Posições</a>
-        </div>
-    </main>
+        </main>
 
     <footer>
-        <p>Copyright &copy; 2025 - Criado por Henrique Mendes</p>
+        <p>Criado por Henrique Mendes</p>
     </footer>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
