@@ -9,6 +9,11 @@
 <body>
     <header>
         <h1>Gerenciador de Elenco</h1>
+
+        <div style="position: absolute; top: 20px; right: 20px; font-size: 0.9em;">
+            <span style="color: #fdb913;">Olá, {{ session['usuario_logado'] }}</span> | 
+            <a href="{{ url_for('action_logout') }}" style="color: white; font-weight: bold;">Sair</a>
+        </div>
     </header>
     <main>
         <h2>Gerenciar Elencos / Times</h2>

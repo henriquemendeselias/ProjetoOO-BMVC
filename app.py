@@ -1,29 +1,43 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
+from functools import wraps
 
 from app.models.jogador import Jogador
 from app.models.posicao import Posicao
 from app.models.time import Time
+from app.models.usuario import Usuario
 
 from app.db.persistencia_jogador import PersistenciaJogador
 from app.db.persistencia_posicao import PersistenciaPosicao
 from app.db.persistencia_time import PersistenciaTime
+from app.db.persistencia_usuario import PersistenciaUsuario
 
 app = Flask(__name__, 
             template_folder='app/html',
             static_folder='app/static')
+app.secret_key = 'chave'
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'usuario_logado' not in session:
+            return redirect(url_for('action_login'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 db = PersistenciaJogador()
 db_pos = PersistenciaPosicao()
 db_time = PersistenciaTime()
+db_usuario = PersistenciaUsuario()
 
-@app.route('/')
 @app.route('/times')
+@login_required
 def action_times_index():
     lista_de_times = db_time.listar_todos()
     return render_template('time_index.tpl', times=lista_de_times)
 
 @app.route('/elenco/<time_id>')
+@login_required
 def action_elenco_detalhes(time_id):
 
     jogadores_lista_completa = db.listar_todos()
@@ -39,6 +53,7 @@ def action_elenco_detalhes(time_id):
     return render_template('index.tpl', jogadores=jogadores_filtrados, posicoes_map=posicoes_map, time=time_obj)
 
 @app.route('/formulario', methods=['GET', 'POST'])
+@login_required
 def action_formulario_novo():
     """
     Create do CRUD - GET e POST
@@ -90,6 +105,7 @@ def action_formulario_novo():
     return render_template('forms_jogador.tpl', **contexto)
 
 @app.route('/editar/<jogador_id>', methods=['GET'])
+@login_required
 def action_formulario_editar(jogador_id):
     """
     Update do CRUD - get
@@ -113,6 +129,7 @@ def action_formulario_editar(jogador_id):
     return render_template('forms_jogador.tpl', **contexto)
 
 @app.route('/editar/salvar', methods=['POST'])
+@login_required
 def action_salvar_edicao():
     """
     Update do CRUD - post
@@ -132,6 +149,7 @@ def action_salvar_edicao():
     return redirect(url_for('action_elenco_detalhes', time_id=time_id))
 
 @app.route('/deletar/<jogador_id>', methods=['GET'])
+@login_required
 def action_deletar(jogador_id):
     """
     Delet do CRUD - get
@@ -141,6 +159,7 @@ def action_deletar(jogador_id):
     return redirect(url_for('action_index'))
 
 @app.route('/posicoes')
+@login_required
 def action_posicoes_index():
     """
     Mostra a lista de todas as posições cadastradas
@@ -149,6 +168,7 @@ def action_posicoes_index():
     return render_template('posicao_index.tpl', posicoes=lista_de_posicoes)
 
 @app.route('/posicao/nova', methods=['GET', 'POST'])
+@login_required
 def action_posicao_nova():
     """
     Create do CRUD - GET e POST
@@ -175,6 +195,7 @@ def action_posicao_nova():
     return render_template('forms_posicao.tpl', **contexto)
 
 @app.route('/posicao/editar/<posicao_id>', methods=['GET', 'POST'])
+@login_required
 def action_posicao_editar(posicao_id):
     """
     Uptade do CRUD - get e post
@@ -205,6 +226,7 @@ def action_posicao_editar(posicao_id):
     return render_template('forms_posicao.tpl', **contexto)
 
 @app.route('/posicao/deletar/<posicao_id>')
+@login_required
 def action_posicao_deletar(posicao_id):
     """
     Delet do CRUD
@@ -213,6 +235,7 @@ def action_posicao_deletar(posicao_id):
     return redirect(url_for('action_posicoes_index'))
 
 @app.route('/time/novo', methods=['GET', 'POST'])
+@login_required
 def action_time_novo():
     """
     Create do CRUD - get e post
@@ -239,6 +262,7 @@ def action_time_novo():
     return render_template('forms_time.tpl', **contexto)
 
 @app.route('/time/editar/<time_id>', methods=['GET', 'POST'])
+@login_required
 def action_time_editar(time_id):
     """
     Update do CRUD - get e post
@@ -269,12 +293,55 @@ def action_time_editar(time_id):
     return render_template('forms_time.tpl', **contexto)
 
 @app.route('/time/deletar/<time_id>')
+@login_required
 def action_time_deletar(time_id):
     """
     Delet do CRUD - deleta um time e volta para a lista
     """
     db_time.deletar(time_id)
     return redirect(url_for('action_times_index'))
+
+@app.route('/', methods=['GET', 'POST'])
+def action_login():
+
+    if 'usuario_logado' in session:
+        return redirect(url_for('action_times_index'))
+
+    if request.method == 'POST':
+        nome = request.form.get('nome')
+        senha = request.form.get('senha')
+        
+        usuario_encontrado = db_usuario.buscar_por_login(nome)
+        
+        if usuario_encontrado and usuario_encontrado.get_senha() == senha:
+            session['usuario_logado'] = nome
+            return redirect(url_for('action_times_index'))
+        else:
+            return render_template('login.tpl', erro="Usuário ou senha incorretos!")
+
+    return render_template('login.tpl')
+
+@app.route('/logout')
+def action_logout():
+    session.pop('usuario_logado', None)
+    return redirect(url_for('action_times_index'))
+
+@app.route('/cadastro')
+def action_abrir_cadastro():
+    return render_template('cadastro.tpl')
+
+@app.route('/realizar_cadastro', methods=['POST'])
+def action_processar_cadastro():
+    nome = request.form.get('nome')
+    senha = request.form.get('senha')
+    
+    if db_usuario.buscar_por_login(nome):
+        return render_template('cadastro.tpl', erro="Este usuário já existe!")
+    
+    novo_usuario = Usuario(nome, senha)
+    db_usuario.salvar(novo_usuario)
+
+    return render_template('login.tpl', erro="Conta criada com sucesso! Faça login.")
 
 if __name__ == '__main__':
     app.run(host='localhost', port=8080, debug=True)
