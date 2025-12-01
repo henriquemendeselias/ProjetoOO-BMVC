@@ -324,7 +324,7 @@ def action_login():
 @app.route('/logout')
 def action_logout():
     session.pop('usuario_logado', None)
-    return redirect(url_for('action_times_index'))
+    return redirect(url_for('action_login'))
 
 @app.route('/cadastro')
 def action_abrir_cadastro():
