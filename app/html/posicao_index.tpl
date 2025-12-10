@@ -32,7 +32,7 @@
                     </tr>
                 {% else %}
                     {% for p in posicoes %}
-                        <tr>
+                        <tr id="tr-posicao-{{ p.get_id() }}">
                             <td>{{ p.get_nome() }}</td>
                             <td>{{ p.get_sigla() }}</td>
                             <td class="acoes">
@@ -54,6 +54,8 @@
     <footer>
         <p>Criado por Henrique Mendes</p>
     </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>

@@ -50,7 +50,7 @@
                     </tr>
                 {% else %}
                     {% for t in times %}
-                        <tr>
+                        <tr id="tr-time-{{ t.get_id() }}">
                             <td>
                                 <a href="{{ url_for('action_elenco_detalhes', time_id=t.get_id()) }}" style="color: #004d98; font-weight: bold;">
                                     {{ t.get_nome() }}

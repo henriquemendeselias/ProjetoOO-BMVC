@@ -173,11 +173,19 @@ def action_deletar(jogador_id):
     """
     Delet do CRUD - get
     """
-    db.deletar(jogador_id)
+    jogador = db.buscar_por_id(jogador_id)
+    
+    if jogador:
+        time_id = jogador.get_time_id() 
+        
+        db.deletar(jogador_id)
 
-    socketio.emit('jogador_removido', {'id': jogador_id})
+        socketio.emit('jogador_removido', {'id': jogador_id})
+        
 
-    return redirect(url_for('action_index'))
+        return redirect(url_for('action_elenco_detalhes', time_id=time_id))
+    
+    return redirect(url_for('action_times_index'))
 
 @app.route('/posicoes')
 @login_required
@@ -203,6 +211,8 @@ def action_posicao_nova():
         
         nova_posicao = Posicao(nome=nome, sigla=sigla)
         db_pos.salvar(nova_posicao)
+
+        socketio.emit('posicao_inserida', nova_posicao.to_dict())
         
         return redirect(url_for('action_posicoes_index'))
 
@@ -231,6 +241,8 @@ def action_posicao_editar(posicao_id):
         
         posicao_atualizada = Posicao(nome=nome, sigla=sigla, id=id_pos)
         db_pos.atualizar(posicao_atualizada)
+
+        socketio.emit('posicao_editada', posicao_atualizada.to_dict())
         
         return redirect(url_for('action_posicoes_index'))
 
@@ -253,6 +265,9 @@ def action_posicao_deletar(posicao_id):
     Delet do CRUD
     """
     db_pos.deletar(posicao_id)
+
+    socketio.emit('posicao_removida', {'id': posicao_id})
+    
     return redirect(url_for('action_posicoes_index'))
 
 @app.route('/time/novo', methods=['GET', 'POST'])
@@ -270,6 +285,9 @@ def action_time_novo():
         
         novo_time = Time(nome=nome, tipo=tipo)
         db_time.salvar(novo_time)
+
+        dados_ws = novo_time.to_dict()
+        socketio.emit('time_inserido', dados_ws)
         
         return redirect(url_for('action_times_index'))
     
@@ -298,6 +316,9 @@ def action_time_editar(time_id):
         
         time_atualizado = Time(nome=nome, tipo=tipo, id=id_time)
         db_time.atualizar(time_atualizado)
+
+        dados_ws = time_atualizado.to_dict()
+        socketio.emit('time_editado', dados_ws)
         
         return redirect(url_for('action_times_index'))
 
@@ -320,6 +341,9 @@ def action_time_deletar(time_id):
     Delet do CRUD - deleta um time e volta para a lista
     """
     db_time.deletar(time_id)
+
+    socketio.emit('time_removido', {'id': time_id})
+
     return redirect(url_for('action_times_index'))
 
 @app.route('/', methods=['GET', 'POST'])

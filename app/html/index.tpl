@@ -58,7 +58,7 @@
                     </tr>
                 {% else %}
                     {% for j in jogadores %}
-                        <tr>
+                        <tr id="tr-jogador-{{j.get_id()}}">
                             <td>{{ j.get_nome() }}</td>
                             <td>{{ posicoes_map.get(j.get_posicao_id(), 'N/A') }}</td>
                             <td>{{ j.get_numero_camisa() }}</td>
