@@ -83,6 +83,8 @@
         <p>Criado por Henrique Mendes</p>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

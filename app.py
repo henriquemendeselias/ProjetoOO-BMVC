@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template, request, redirect, url_for, session
+from flask_socketio import SocketIO
 from functools import wraps
 
 from app.models.jogador import Jogador
@@ -16,6 +17,7 @@ app = Flask(__name__,
             template_folder='app/html',
             static_folder='app/static')
 app.secret_key = 'chave'
+socketio = SocketIO(app)
 
 def login_required(f):
     @wraps(f)
@@ -71,6 +73,15 @@ def action_formulario_novo():
         novo_jogador = Jogador(nome=nome, posicao_id=posicao_id, time_id=time_id, numero_camisa=numero, data_nascimento=data_nasc, nacionalidade=nacionalidade)
 
         db.salvar(novo_jogador)
+
+        dados_ws = novo_jogador.to_dict()
+        
+        pos_obj = db_pos.buscar_por_id(posicao_id)
+        dados_ws['nome_posicao'] = pos_obj.get_nome() if pos_obj else "N/A"
+        
+        dados_ws['idade'] = novo_jogador.get_idade()
+
+        socketio.emit('jogador_inserido', dados_ws)
 
         return redirect(url_for('action_elenco_detalhes', time_id=time_id))
     
@@ -145,6 +156,14 @@ def action_salvar_edicao():
     jogador_atualizado = Jogador(nome=nome, posicao_id=posicao_id, time_id=time_id, numero_camisa=numero, data_nascimento=data_nasc, nacionalidade=nacionalidade, id=id_jogador)
     
     db.atualizar(jogador_atualizado)
+
+    dados_ws = jogador_atualizado.to_dict()
+    
+    pos_obj = db_pos.buscar_por_id(posicao_id)
+    dados_ws['nome_posicao'] = pos_obj.get_nome() if pos_obj else "N/A"
+    dados_ws['idade'] = jogador_atualizado.get_idade()
+
+    socketio.emit('jogador_editado', dados_ws)
     
     return redirect(url_for('action_elenco_detalhes', time_id=time_id))
 
@@ -155,6 +174,8 @@ def action_deletar(jogador_id):
     Delet do CRUD - get
     """
     db.deletar(jogador_id)
+
+    socketio.emit('jogador_removido', {'id': jogador_id})
 
     return redirect(url_for('action_index'))
 
@@ -344,4 +365,4 @@ def action_processar_cadastro():
     return render_template('login.tpl', erro="Conta criada com sucesso! Faça login.")
 
 if __name__ == '__main__':
-    app.run(host='localhost', port=8080, debug=True)
+    socketio.run(app, host='localhost', port=8080, debug=True)

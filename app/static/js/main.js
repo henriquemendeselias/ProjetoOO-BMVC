@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
+    if (typeof io !== 'undefined') {
+        var socket = io();
+
+        socket.on('connect', function() {
+            console.log('Conectado ao WebSocket');
+        });
+    }
+
     const botoesDeletar = document.querySelectorAll('.btn-deletar');
     
     botoesDeletar.forEach(function(botao) {
